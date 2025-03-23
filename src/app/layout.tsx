@@ -6,10 +6,10 @@ import { ApplicationLayout } from './application-layout'
 
 export const metadata: Metadata = {
   title: {
-    template: '%s - Catalyst',
-    default: 'Catalyst',
+    template: '%s - XtremeX Copy Trading',
+    default: 'XtremeX Copy Trading',
   },
-  description: '',
+  description: 'Copy trading platform with Telegram authentication',
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

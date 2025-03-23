@@ -59,10 +59,10 @@ export default function TelegramLogin({
       script.setAttribute('data-telegram-login', botName)
       script.setAttribute('data-size', buttonSize)
       script.setAttribute('data-radius', cornerRadius.toString())
-      script.setAttribute('data-request-access', requestAccess ? 'write' : 'read')
+      script.setAttribute('data-request-access', 'write')
       script.setAttribute('data-userpic', usePic.toString())
       // Fix the user reference issue by using a global callback function name
-      script.setAttribute('data-onauth', 'TelegramLoginWidget.dataOnauth')
+      script.setAttribute('data-onauth', 'console.log(data)')
       script.async = true
 
       containerRef.current.appendChild(script)

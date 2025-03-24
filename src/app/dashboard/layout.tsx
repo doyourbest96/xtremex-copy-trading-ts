@@ -198,9 +198,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <span className="flex min-w-0 items-center gap-3">
                   <Avatar src={user?.photo_url} className="size-10" square alt={user?.first_name} />
                   <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">{`${user?.first_name} ${user?.last_name}`}</span>
+                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">{user ? user.first_name : 'Unknown'}</span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
-                      {user?.id}
+                      {user?.username}
                     </span>
                   </span>
                 </span>

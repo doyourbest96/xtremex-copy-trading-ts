@@ -1,8 +1,6 @@
 import { AuthProvider } from '@/contexts/auth-context'
-import { getEvents } from '@/data'
 import type { Metadata } from 'next'
 import type React from 'react'
-import { ApplicationLayout } from './application-layout'
 
 import '@/styles/tailwind.css'
 
@@ -14,9 +12,7 @@ export const metadata: Metadata = {
   description: 'Copy trading platform with Telegram authentication',
 }
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  let events = await getEvents()
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
@@ -27,9 +23,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
       </head>
       <body>
-        <AuthProvider>
-          <ApplicationLayout events={events}>{children}</ApplicationLayout>
-        </AuthProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   )

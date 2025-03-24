@@ -68,13 +68,8 @@ function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' })
   )
 }
 
-export function ApplicationLayout({
-  events,
-  children,
-}: {
-  events: Awaited<ReturnType<typeof getEvents>>
-  children: React.ReactNode
-}) {
+export async function ApplicationLayout({ children }: { children: React.ReactNode }) {
+  let events = await getEvents()
   let pathname = usePathname()
 
   return (

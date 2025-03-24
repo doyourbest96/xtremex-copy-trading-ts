@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         if (data.user) {
           setUser(data.user)
-        } else if (pathname !== '/login') {
+        } else if (pathname !== '/' && pathname !== '/login') {
           router.push('/login')
         }
       } catch (error) {

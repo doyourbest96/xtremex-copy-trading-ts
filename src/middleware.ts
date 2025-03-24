@@ -21,7 +21,7 @@ export function middleware(request: NextRequest) {
 
   if (isAuthenticated && isPublicPath) {
     // Redirect to home if trying to access login while already authenticated
-    return NextResponse.redirect(new URL('/', request.url))
+    return NextResponse.redirect(new URL('/dashbaord', request.url))
   }
 
   return NextResponse.next()

@@ -22,6 +22,7 @@ import {
   SidebarSpacer,
 } from '@/components/sidebar'
 import { SidebarLayout } from '@/components/sidebar-layout'
+import { useAuth } from '@/contexts/auth-context'
 import { getEvents } from '@/data'
 import {
   ArrowRightStartOnRectangleIcon,
@@ -43,7 +44,6 @@ import {
 } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { useAuth } from '@/contexts/auth-context'
 
 // Define the Event type based on the structure returned by getEvents()
 type Event = {
@@ -198,7 +198,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <span className="flex min-w-0 items-center gap-3">
                   <Avatar src={user?.photo_url} className="size-10" square alt={user?.first_name} />
                   <span className="min-w-0">
-                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">{user ? user.first_name : 'Unknown'}</span>
+                    <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
+                      {user ? user.first_name : 'Unknown'}
+                    </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
                       {user?.username}
                     </span>

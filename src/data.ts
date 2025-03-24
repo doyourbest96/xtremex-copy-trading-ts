@@ -726,7 +726,7 @@ export async function getEvents() {
     {
       id: 1000,
       name: 'Bear Hug: Live in Concert',
-      url: '/events/1000',
+      url: '/dashbaord/events/1000',
       date: 'May 20, 2024',
       time: '10 PM',
       location: 'Harmony Theater, Winnipeg, MB',
@@ -744,7 +744,7 @@ export async function getEvents() {
     {
       id: 1001,
       name: 'Six Fingers — DJ Set',
-      url: '/events/1001',
+      url: '/dashbaord/events/1001',
       date: 'Jun 2, 2024',
       time: '8 PM',
       location: 'Moonbeam Arena, Uxbridge, ON',
@@ -762,7 +762,7 @@ export async function getEvents() {
     {
       id: 1002,
       name: 'We All Look The Same',
-      url: '/events/1002',
+      url: '/dashbaord/events/1002',
       date: 'Aug 5, 2024',
       time: '4 PM',
       location: 'Electric Coliseum, New York, NY',
@@ -780,7 +780,7 @@ export async function getEvents() {
     {
       id: 1003,
       name: 'Viking People',
-      url: '/events/1003',
+      url: '/dashbaord/events/1003',
       date: 'Dec 31, 2024',
       time: '8 PM',
       location: 'Tapestry Hall, Cambridge, ON',

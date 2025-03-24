@@ -1,12 +1,14 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
+const publicPaths = ['/', '/login']
+
 export function middleware(request: NextRequest) {
   // Get the path of the request
   const path = request.nextUrl.pathname
 
   // Define public paths that don't require authentication
-  const isPublicPath = path === '/login'
+  const isPublicPath = publicPaths.includes(path)
 
   // Get the token from the cookies
   const isAuthenticated = request.cookies.has('auth_token')

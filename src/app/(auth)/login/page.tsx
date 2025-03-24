@@ -2,6 +2,7 @@
 
 import TelegramLogin, { TelegramUser } from '@/components/telegram-login'
 import { useAuth } from '@/contexts/auth-context'
+import Link from 'next/link'
 import { useState } from 'react'
 
 const TELEGRAM_BOT_NAME = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || 'YOUR_BOT_NAME'
@@ -20,27 +21,78 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight">Sign in to XtremeX Copy Trading</h2>
-          <p className="mt-2 text-center text-sm">Use your Telegram account to sign in</p>
-        </div>
+    <div className="relative min-h-screen">
+      {/* Background gradient */}
+      <div
+        className="absolute inset-x-0 top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
+        aria-hidden="true"
+      >
+        <div className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-blue-500 to-purple-500 opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]" />
+      </div>
 
-        {error && (
-          <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/30">
-            <div className="text-sm text-red-700 dark:text-red-200">{error}</div>
+      {/* Header */}
+      <div className="px-6 pt-6 lg:px-8">
+        <nav className="flex items-center justify-between" aria-label="Global">
+          <div className="flex lg:flex-1">
+            <Link href="/" className="text-xl font-bold text-zinc-900 dark:text-white">
+              XtremeX
+            </Link>
           </div>
-        )}
+        </nav>
+      </div>
 
-        <div className="mt-8 flex justify-center">
-          <TelegramLogin
-            botName={TELEGRAM_BOT_NAME}
-            onAuth={handleTelegramAuth}
-            buttonSize="large"
-            cornerRadius={8}
-            requestAccess={true}
-          />
+      <div className="flex min-h-[calc(100vh-80px)] flex-col items-center justify-center px-6 py-12 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center">
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Welcome to XtremeX</h2>
+            <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+              Sign in with your Telegram account to start trading
+            </p>
+          </div>
+
+          {error && (
+            <div className="rounded-md bg-red-50 p-4 dark:bg-red-900/30">
+              <div className="text-sm text-red-700 dark:text-red-200">{error}</div>
+            </div>
+          )}
+
+          <div className="mt-8">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                <div className="w-full border-t border-zinc-200 dark:border-zinc-700" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-2 text-zinc-500 dark:bg-zinc-900 dark:text-zinc-400">
+                  Secure authentication
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-6">
+              <div className="flex justify-center">
+                <TelegramLogin
+                  botName={TELEGRAM_BOT_NAME}
+                  onAuth={handleTelegramAuth}
+                  buttonSize="large"
+                  cornerRadius={8}
+                  requestAccess={true}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 text-center text-sm">
+            <p className="text-zinc-600 dark:text-zinc-400">
+              By signing in, you agree to our{' '}
+              <Link href="#" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link href="#" className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400">
+                Privacy Policy
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

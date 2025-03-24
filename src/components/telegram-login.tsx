@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 interface TelegramLoginProps {
   botName: string
@@ -27,6 +27,7 @@ declare global {
     TelegramLoginWidget: {
       dataOnauth: (user: TelegramUser) => void
     }
+    handleTelegramLogin?: (user: TelegramUser) => void // Make this optional
   }
 }
 
@@ -41,18 +42,26 @@ export default function TelegramLogin({
 }: TelegramLoginProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
-  const handleTelegramLogin = (user: TelegramUser) => {
-    console.log('Telegram user data:', user)
-    onAuth(user)
-  }
+  const handleTelegramLogin = useCallback(
+    (user: TelegramUser) => {
+      console.log('Telegram user data:', user)
+      onAuth(user)
+    },
+    [onAuth]
+  )
 
   useEffect(() => {
     // Add a debug log to verify the component is mounting
     console.log('TelegramLogin component mounted, setting up widget for bot:', botName)
 
+    const currentContainer = containerRef.current
+
+    // Attach the function to the window object
+    window.handleTelegramLogin = handleTelegramLogin
+
     // Clean up the container before adding the script
-    if (containerRef.current) {
-      containerRef.current.innerHTML = ''
+    if (currentContainer) {
+      currentContainer.innerHTML = ''
 
       // Create the Telegram login button script
       const script = document.createElement('script')
@@ -62,25 +71,26 @@ export default function TelegramLogin({
       script.setAttribute('data-radius', cornerRadius.toString())
       script.setAttribute('data-request-access', requestAccess ? 'write' : 'read')
       script.setAttribute('data-userpic', usePic.toString())
-      script.setAttribute('data-onauth', 'handleTelegramLogin(user)')
+      script.setAttribute('data-onauth', 'window.handleTelegramLogin(user)')
       script.async = true
 
       // Add event listeners to debug script loading
       script.onload = () => console.log('Telegram widget script loaded successfully')
       script.onerror = (e) => console.error('Error loading Telegram widget script:', e)
 
-      containerRef.current.appendChild(script)
+      currentContainer.appendChild(script)
       console.log('Telegram login script added to DOM')
     }
 
     return () => {
       // Clean up
-      if (containerRef.current) {
-        containerRef.current.innerHTML = ''
+      if (currentContainer) {
+        currentContainer.innerHTML = ''
       }
       console.log('TelegramLogin component unmounted')
+      window.handleTelegramLogin = undefined // Set to undefined instead of deleting
     }
-  }, [botName, buttonSize, cornerRadius, requestAccess, usePic, onAuth])
+  }, [botName, buttonSize, cornerRadius, requestAccess, usePic, handleTelegramLogin])
 
   return <div ref={containerRef} className={className} />
 }

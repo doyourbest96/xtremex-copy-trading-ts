@@ -26,9 +26,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const response = await fetch('/api/auth/session')
         console.log('Response from /api/auth/session:', response)
         const data = await response.json()
+        console.log('Data from /api/auth/session:', data)
 
         if (data.user) {
           setUser(data.user)
+          router.push('/dashboard')
         } else if (pathname !== '/' && pathname !== '/login') {
           router.push('/login')
         }

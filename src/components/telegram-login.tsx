@@ -45,6 +45,7 @@ export default function TelegramLogin({
     // Define the callback function for Telegram login
     window.TelegramLoginWidget = {
       dataOnauth: (user: TelegramUser) => {
+        console.log('Telegram user data:', user)
         onAuth(user)
       },
     }

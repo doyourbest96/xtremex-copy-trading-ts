@@ -1,3 +1,5 @@
+'use client'
+
 import { Badge } from '@/components/badge'
 import { Button } from '@/components/button'
 import { Divider } from '@/components/divider'
@@ -8,14 +10,31 @@ import { Link } from '@/components/link'
 import { Select } from '@/components/select'
 import { getEvents } from '@/data'
 import { EllipsisVerticalIcon, MagnifyingGlassIcon } from '@heroicons/react/16/solid'
-import type { Metadata } from 'next'
+import { useEffect, useState } from 'react'
 
-export const metadata: Metadata = {
-  title: 'Events',
+interface Event {
+  id: number
+  name: string
+  url: string
+  date: string
+  time: string
+  location: string
+  status: string
+  imgUrl: string
+  ticketsSold: number
+  ticketsAvailable: number
 }
 
-export default async function Events() {
-  let events = await getEvents()
+export default function Events() {
+  const [events, setEvents] = useState<Event[]>([])
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const data = await getEvents()
+      setEvents(data)
+    }
+    fetchEvents()
+  }, [])
 
   return (
     <>

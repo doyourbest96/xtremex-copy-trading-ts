@@ -1,12 +1,45 @@
+'use client'
+
 import { Stat } from '@/app/stat'
 import { Avatar } from '@/components/avatar'
 import { Heading, Subheading } from '@/components/heading'
 import { Select } from '@/components/select'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
 import { getRecentOrders } from '@/data'
+import { useEffect, useState } from 'react'
 
-export default async function Home() {
-  let orders = await getRecentOrders()
+interface Event {
+  thumbUrl: string
+  name: string
+}
+
+interface Customer {
+  name: string
+}
+
+interface Amount {
+  usd: string
+}
+
+interface Order {
+  id: number
+  url: string
+  date: string
+  customer: Customer
+  event: Event
+  amount: Amount
+}
+
+export default function Home() {
+  const [orders, setOrders] = useState<Order[]>([])
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const data = await getRecentOrders()
+      setOrders(data)
+    }
+    fetchOrders()
+  }, [])
 
   return (
     <>

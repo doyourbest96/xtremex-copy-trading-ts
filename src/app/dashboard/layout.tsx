@@ -42,6 +42,24 @@ import {
   TicketIcon,
 } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+
+// Define the Event type based on the structure returned by getEvents()
+type Event = {
+  id: number
+  name: string
+  url: string
+  date: string
+  time: string
+  location: string
+  totalRevenue: string
+  totalRevenueChange: string
+  ticketsAvailable: number
+  ticketsSold: number
+  ticketsSoldChange: string
+  thumbUrl: string
+  // Add any other properties that might be in the event object
+}
 
 function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' }) {
   return (
@@ -68,9 +86,19 @@ function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' })
   )
 }
 
-export async function ApplicationLayout({ children }: { children: React.ReactNode }) {
-  let events = await getEvents()
-  let pathname = usePathname()
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname()
+  // Properly type the state variable
+  const [events, setEvents] = useState<Event[]>([])
+
+  useEffect(() => {
+    async function fetchEvents() {
+      const eventsData = await getEvents()
+      setEvents(eventsData)
+    }
+
+    fetchEvents()
+  }, [])
 
   return (
     <SidebarLayout

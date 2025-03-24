@@ -1,16 +1,44 @@
+'use client'
+
 import { Avatar } from '@/components/avatar'
 import { Button } from '@/components/button'
 import { Heading } from '@/components/heading'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
 import { getOrders } from '@/data'
-import type { Metadata } from 'next'
+import { useEffect, useState } from 'react'
 
-export const metadata: Metadata = {
-  title: 'Orders',
+interface Event {
+  thumbUrl: string
+  name: string
 }
 
-export default async function Orders() {
-  let orders = await getOrders()
+interface Customer {
+  name: string
+}
+
+interface Amount {
+  usd: string
+}
+
+interface Order {
+  id: number
+  url: string
+  date: string
+  customer: Customer
+  event: Event
+  amount: Amount
+}
+
+export default function Orders() {
+  const [orders, setOrders] = useState<Order[]>([])
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const data = await getOrders()
+      setOrders(data)
+    }
+    fetchOrders()
+  }, [])
 
   return (
     <>

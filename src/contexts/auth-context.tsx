@@ -24,6 +24,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const checkUserSession = async () => {
       try {
         const response = await fetch('/api/auth/session')
+        console.log('Response from /api/auth/session:', response)
         const data = await response.json()
 
         if (data.user) {
@@ -54,9 +55,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const data = await response.json()
 
+      console.log('Login response:', data)
+
       if (data.success) {
         setUser(userData)
-        router.push('/')
+        router.push('/dashboard')
       } else {
         throw new Error(data.error || 'Authentication failed')
       }

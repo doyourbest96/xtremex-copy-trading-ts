@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
 
   const handleTelegramAuth = async (user: TelegramUser) => {
+    console.log('Telegram user data:', user)
     try {
       await login(user)
     } catch (err: any) {

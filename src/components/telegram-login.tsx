@@ -42,6 +42,9 @@ export default function TelegramLogin({
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Add a debug log to verify the component is mounting
+    console.log('TelegramLogin component mounted, setting up widget for bot:', botName)
+
     // Define the callback function for Telegram login
     window.TelegramLoginWidget = {
       dataOnauth: (user: TelegramUser) => {
@@ -62,11 +65,15 @@ export default function TelegramLogin({
       script.setAttribute('data-radius', cornerRadius.toString())
       script.setAttribute('data-request-access', requestAccess ? 'write' : 'read')
       script.setAttribute('data-userpic', usePic.toString())
-      // Fix the user reference issue by using a global callback function name
       script.setAttribute('data-onauth', 'TelegramLoginWidget.dataOnauth')
       script.async = true
 
+      // Add event listeners to debug script loading
+      script.onload = () => console.log('Telegram widget script loaded successfully')
+      script.onerror = (e) => console.error('Error loading Telegram widget script:', e)
+
       containerRef.current.appendChild(script)
+      console.log('Telegram login script added to DOM')
     }
 
     return () => {
@@ -74,9 +81,9 @@ export default function TelegramLogin({
       if (containerRef.current) {
         containerRef.current.innerHTML = ''
       }
+      console.log('TelegramLogin component unmounted')
     }
   }, [botName, buttonSize, cornerRadius, requestAccess, usePic, onAuth])
 
-  // Return a div element (ReactNode) instead of void
   return <div ref={containerRef} className={className} />
 }

@@ -41,17 +41,14 @@ export default function TelegramLogin({
 }: TelegramLoginProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
+  const handleTelegramLogin = (user: TelegramUser) => {
+    console.log('Telegram user data:', user)
+    onAuth(user)
+  }
+
   useEffect(() => {
     // Add a debug log to verify the component is mounting
     console.log('TelegramLogin component mounted, setting up widget for bot:', botName)
-
-    // Define the callback function for Telegram login
-    window.TelegramLoginWidget = {
-      dataOnauth: (user: TelegramUser) => {
-        console.log('Telegram user data:', user)
-        onAuth(user)
-      },
-    }
 
     // Clean up the container before adding the script
     if (containerRef.current) {
@@ -65,7 +62,7 @@ export default function TelegramLogin({
       script.setAttribute('data-radius', cornerRadius.toString())
       script.setAttribute('data-request-access', requestAccess ? 'write' : 'read')
       script.setAttribute('data-userpic', usePic.toString())
-      script.setAttribute('data-onauth', 'TelegramLoginWidget.dataOnauth')
+      script.setAttribute('data-onauth', 'handleTelegramLogin(user)')
       script.async = true
 
       // Add event listeners to debug script loading

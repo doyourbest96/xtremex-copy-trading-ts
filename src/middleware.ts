@@ -1,13 +1,15 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
-import { jwtVerify } from 'jose' // You'll need to install this: npm install jose
+import { jwtVerify } from 'jose'
 
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret'
 const publicPaths = ['/', '/login']
 
 // This function checks if the path is public
 const isPublicPath = (path: string) => {
   return publicPaths.some(publicPath => path === publicPath || path.startsWith(`${publicPath}/`))
 }
+
 export async function middleware(request: NextRequest) {
   // Get the path of the request
   const path = request.nextUrl.pathname
@@ -29,7 +31,7 @@ export async function middleware(request: NextRequest) {
   let authToken = null
   if (rawToken) {
     if (rawToken.startsWith('Bearer ')) {
-      authToken = rawToken.substring(7) // Remove "Bearer " prefix
+      authToken = rawToken.split(' ')[1]
     } else {
       authToken = rawToken
     }
@@ -39,10 +41,9 @@ export async function middleware(request: NextRequest) {
   
   if (authToken) {
     try {
-      // Verify the token with the correct secret
-      const JWT_SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET_KEY || 'your-secret-key')
-      
-      await jwtVerify(authToken, JWT_SECRET_KEY)
+      // Convert the JWT_SECRET string to a TextEncoder
+      const secretKey = new TextEncoder().encode(JWT_SECRET)
+      await jwtVerify(authToken, secretKey)
       isAuthenticated = true
     } catch (error) {
       console.error('Token verification failed:', error)

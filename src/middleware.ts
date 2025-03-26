@@ -1,27 +1,66 @@
 import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
+import { jwtVerify } from 'jose' // You'll need to install this: npm install jose
 
 const publicPaths = ['/', '/login']
 
-export function middleware(request: NextRequest) {
+// This function checks if the path is public
+const isPublicPath = (path: string) => {
+  return publicPaths.some(publicPath => path === publicPath || path.startsWith(`${publicPath}/`))
+}
+export async function middleware(request: NextRequest) {
   // Get the path of the request
   const path = request.nextUrl.pathname
+  console.log('path:', path)
 
-  // Define public paths that don't require authentication
-  const isPublicPath = publicPaths.includes(path)
+  // Check if the path is public
+  const isPathPublic = isPublicPath(path)
+  console.log('isPublicPath:', isPathPublic)
 
-  // Get the token from the cookies
-  const isAuthenticated = request.cookies.has('auth_token')
-
+  // Get auth token from header or cookie
+  const authHeader = request.headers.get('x-auth-token')
+  const authCookie = request.cookies.get('auth_token')?.value
+  
+  // Use header or cookie, whichever is available
+  let rawToken = authHeader || authCookie
+  console.log('token:', rawToken)
+  
+  // Extract the actual token by removing the "Bearer " prefix if present
+  let authToken = null
+  if (rawToken) {
+    if (rawToken.startsWith('Bearer ')) {
+      authToken = rawToken.substring(7) // Remove "Bearer " prefix
+    } else {
+      authToken = rawToken
+    }
+  }
+  
+  let isAuthenticated = false
+  
+  if (authToken) {
+    try {
+      // Verify the token with the correct secret
+      const JWT_SECRET_KEY = new TextEncoder().encode(process.env.JWT_SECRET_KEY || 'your-secret-key')
+      
+      await jwtVerify(authToken, JWT_SECRET_KEY)
+      isAuthenticated = true
+    } catch (error) {
+      console.error('Token verification failed:', error)
+      isAuthenticated = false
+    }
+  }
+  
+  console.log('isAuthenticated:', isAuthenticated)
+  
   // Redirect logic
-  if (!isAuthenticated && !isPublicPath) {
+  if (!isAuthenticated && !isPathPublic) {
     // Redirect to login if trying to access protected route without auth
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  if (isAuthenticated && isPublicPath) {
-    // Redirect to home if trying to access login while already authenticated
-    return NextResponse.redirect(new URL('/dashbaord', request.url))
+  if (isAuthenticated && isPathPublic) {
+    // Redirect to dashboard if trying to access login while already authenticated
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   return NextResponse.next()

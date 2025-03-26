@@ -2,14 +2,25 @@
 
 import TelegramLogin, { TelegramUser } from '@/components/telegram-login'
 import { useAuth } from '@/contexts/auth-context'
+import { apiClient } from '@/lib/apiClient'
+import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const TELEGRAM_BOT_NAME = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || 'YOUR_BOT_NAME'
 
 export default function LoginPage() {
   const { login } = useAuth()
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Check if token exists
+    const token = localStorage.getItem('accessToken')
+    if (token) {
+      // If token exists, update the headers immediately
+      apiClient.defaults.headers.common['x-auth-token'] = `Bearer ${token}`
+    }
+  }, [])
 
   const handleTelegramAuth = async (user: TelegramUser) => {
     console.log('Telegram user data:', user)
@@ -78,6 +89,13 @@ export default function LoginPage() {
                   cornerRadius={8}
                   requestAccess={true}
                 />
+              </div>
+
+              {/* Modern, simple, clean message with themed color */}
+              <div className="mt-4 flex items-center justify-center gap-1.5 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                <InformationCircleIcon className="h-4 w-4 text-blue-500 dark:text-blue-400" aria-hidden="true" />
+                <span>Logging out of XtremeX wont log you out of Telegram</span>
+                <InformationCircleIcon className="h-4 w-4 text-blue-500 dark:text-blue-400" aria-hidden="true" />
               </div>
             </div>
           </div>

@@ -1,11 +1,19 @@
 'use client'
 
 import { TelegramUser } from '@/components/telegram-login'
+import { apiClient } from '@/lib/apiClient'
+import axios from 'axios'
 import { usePathname, useRouter } from 'next/navigation'
 import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
+// Extended user interface
+interface AuthUser extends TelegramUser {
+  id: number
+  username: string
+}
+
 interface AuthContextType {
-  user: TelegramUser | null
+  user: AuthUser | null
   isLoading: boolean
   login: (userData: TelegramUser) => Promise<void>
   logout: () => void
@@ -13,28 +21,74 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
+const storeToken = (accessToken: string) => {
+  // Store in localStorage
+  localStorage.setItem('accessToken', accessToken)
+
+  // Set a cookie that the server can read
+  document.cookie = `auth_token=${accessToken}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`
+}
+
+// Helper to get token from localStorage
+const getStoredToken = (): string | null => {
+  if (typeof window === 'undefined') return null
+
+  return localStorage.getItem('accessToken')
+}
+
+const clearToken = () => {
+  // Clear from localStorage
+  localStorage.removeItem('accessToken')
+
+  // Also clear the cookie
+  document.cookie = 'auth_token=; path=/; max-age=0'
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<TelegramUser | null>(null)
+  const [user, setUser] = useState<AuthUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   const pathname = usePathname()
+
+  // Function to fetch user data using the access token
+  // Function to fetch user data using the access token
+  const fetchUserData = async (): Promise<AuthUser | null> => {
+    try {
+      const token = getStoredToken()
+      if (!token) return null
+
+      const response = await apiClient.get('/auth/me')
+      return response.data.data.user
+    } catch (error) {
+      console.error('Failed to fetch user data:', error)
+
+      // Check if it's an authentication error (401 or 403)
+      if (axios.isAxiosError(error) && (error.response?.status === 401 || error.response?.status === 403)) {
+        // Clear invalid token
+        clearToken()
+      }
+
+      return null
+    }
+  }
 
   useEffect(() => {
     // Check for existing user session on initial load
     const checkUserSession = async () => {
       try {
-        const response = await fetch('/api/auth/session')
-        console.log('Response from /api/auth/session:', response)
-        const data = await response.json()
-        console.log('Data from /api/auth/session:', data)
+        const userData = await fetchUserData()
 
-        if (data.user) {
-          setUser(data.user)
+        if (userData) {
+          setUser(userData)
         } else if (pathname !== '/' && pathname !== '/login') {
+          clearToken()
           router.push('/login')
         }
       } catch (error) {
         console.error('Failed to fetch user session:', error)
+        if (pathname !== '/' && pathname !== '/login') {
+          router.push('/login')
+        }
       } finally {
         setIsLoading(false)
       }
@@ -43,29 +97,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkUserSession()
   }, [router, pathname])
 
-  const login = async (userData: TelegramUser) => {
+  const login = async (telegramData: TelegramUser) => {
     setIsLoading(true)
     try {
-      const response = await fetch('/api/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      })
-
-      const data = await response.json()
+      const response = await apiClient.post('/auth/telegram', telegramData)
+      const data = response.data
 
       console.log('Login response:', data)
 
       if (data.success) {
-        setUser(userData)
+        // Store token
+        storeToken(data.data.accessToken)
+
+        // Set user data
+        setUser(data.data.user)
+
         router.push('/dashboard')
       } else {
         throw new Error(data.error || 'Authentication failed')
       }
     } catch (error) {
       console.error('Login error:', error)
+
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.error || 'Authentication failed'
+        throw new Error(errorMessage)
+      }
+
       throw error
     } finally {
       setIsLoading(false)
@@ -74,11 +132,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await fetch('/api/auth/logout', { method: 'POST' })
-      setUser(null)
-      router.push('/login')
+      // apiClient will automatically include the token in the request
+      await apiClient.post('/auth/logout')
     } catch (error) {
       console.error('Logout error:', error)
+    } finally {
+      // Clear token and user state regardless of API response
+      clearToken()
+      setUser(null)
+      router.push('/login')
     }
   }
 

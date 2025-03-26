@@ -63,6 +63,7 @@ type Event = {
 }
 
 function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' }) {
+  const { logout } = useAuth()
   return (
     <DropdownMenu className="min-w-64" anchor={anchor}>
       <DropdownItem href="#">
@@ -81,14 +82,14 @@ function AccountDropdownMenu({ anchor }: { anchor: 'top start' | 'bottom end' })
       <DropdownDivider />
       <DropdownItem href="#">
         <ArrowRightStartOnRectangleIcon />
-        <DropdownLabel>Sign out</DropdownLabel>
+        <DropdownLabel onClick={logout}>Sign out</DropdownLabel>
       </DropdownItem>
     </DropdownMenu>
   )
 }
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const pathname = usePathname()
   // Properly type the state variable
   const [events, setEvents] = useState<Event[]>([])

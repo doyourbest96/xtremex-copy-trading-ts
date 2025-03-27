@@ -44,7 +44,7 @@ export default function TelegramLogin({
 
   const handleTelegramLogin = useCallback(
     (user: TelegramUser) => {
-      console.log('Telegram user data:', user)
+      // console.log('Telegram user data:', user)
       onAuth(user)
     },
     [onAuth]

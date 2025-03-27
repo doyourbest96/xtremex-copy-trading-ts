@@ -1,14 +1,14 @@
 'use client'
 
-import { Button } from '@/components/button'
-import { Checkbox, CheckboxField } from '@/components/checkbox'
-import { Divider } from '@/components/divider'
-import { Label } from '@/components/fieldset'
-import { Heading, Subheading } from '@/components/heading'
-import { Input } from '@/components/input'
-import { Select } from '@/components/select'
-import { Text } from '@/components/text'
-import { Textarea } from '@/components/textarea'
+import { Button } from '@/components/ui/button'
+import { Checkbox, CheckboxField } from '@/components/ui/checkbox'
+import { Divider } from '@/components/ui/divider'
+import { Label } from '@/components/ui/fieldset'
+import { Heading, Subheading } from '@/components/ui/heading'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
+import { Text } from '@/components/ui/text'
+import { Textarea } from '@/components/ui/textarea'
 import { Address } from './address'
 
 export default function Settings() {

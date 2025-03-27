@@ -1,6 +1,6 @@
 'use client'
 
-import { Avatar } from '@/components/avatar'
+import { Avatar } from '@/components/ui/avatar'
 import {
   Dropdown,
   DropdownButton,
@@ -8,8 +8,8 @@ import {
   DropdownItem,
   DropdownLabel,
   DropdownMenu,
-} from '@/components/dropdown'
-import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/navbar'
+} from '@/components/ui/dropdown'
+import { Navbar, NavbarItem, NavbarSection, NavbarSpacer } from '@/components/ui/navbar'
 import {
   Sidebar,
   SidebarBody,
@@ -20,8 +20,8 @@ import {
   SidebarLabel,
   SidebarSection,
   SidebarSpacer,
-} from '@/components/sidebar'
-import { SidebarLayout } from '@/components/sidebar-layout'
+} from '@/components/ui/sidebar'
+import { SidebarLayout } from '@/components/ui/sidebar-layout'
 import { useAuth } from '@/contexts/auth-context'
 import { getEvents } from '@/data'
 import {
@@ -155,6 +155,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <SidebarItem href="/dashboard/" current={pathname === '/'}>
                 <HomeIcon />
                 <SidebarLabel>Home</SidebarLabel>
+              </SidebarItem>
+              <SidebarItem href="/dashboard/accounts" current={pathname.startsWith('/accounts')}>
+                <Square2StackIcon />
+                <SidebarLabel>Accounts</SidebarLabel>
               </SidebarItem>
               <SidebarItem href="/dashboard/events" current={pathname.startsWith('/events')}>
                 <Square2StackIcon />

@@ -1,10 +1,10 @@
 'use client'
 
 import { Stat } from '@/app/stat'
-import { Avatar } from '@/components/avatar'
-import { Heading, Subheading } from '@/components/heading'
-import { Select } from '@/components/select'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
+import { Avatar } from '@/components/ui/avatar'
+import { Heading, Subheading } from '@/components/ui/heading'
+import { Select } from '@/components/ui/select'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getRecentOrders } from '@/data'
 import { useEffect, useState } from 'react'
 

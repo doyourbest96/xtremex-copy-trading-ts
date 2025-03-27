@@ -1,9 +1,9 @@
 'use client'
 
-import { Avatar } from '@/components/avatar'
-import { Button } from '@/components/button'
-import { Heading } from '@/components/heading'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/table'
+import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Heading } from '@/components/ui/heading'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { getOrders } from '@/data'
 import { useEffect, useState } from 'react'
 

@@ -1,11 +1,11 @@
 'use client'
 
-import { Button } from '@/components/button'
-import { Checkbox, CheckboxField } from '@/components/checkbox'
-import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/dialog'
-import { Description, Field, FieldGroup, Label } from '@/components/fieldset'
-import { Input } from '@/components/input'
-import { Select } from '@/components/select'
+import { Button } from '@/components/ui/button'
+import { Checkbox, CheckboxField } from '@/components/ui/checkbox'
+import { Dialog, DialogActions, DialogBody, DialogDescription, DialogTitle } from '@/components/ui/dialog'
+import { Description, Field, FieldGroup, Label } from '@/components/ui/fieldset'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import { useState } from 'react'
 
 export function RefundOrder({ amount, ...props }: { amount: string } & React.ComponentPropsWithoutRef<typeof Button>) {

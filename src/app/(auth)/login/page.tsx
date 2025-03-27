@@ -23,7 +23,7 @@ export default function LoginPage() {
   }, [])
 
   const handleTelegramAuth = async (user: TelegramUser) => {
-    console.log('Telegram user data:', user)
+    // console.log('Telegram user data:', user)
     try {
       await login(user)
     } catch (err: any) {

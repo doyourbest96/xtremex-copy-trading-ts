@@ -1,5 +1,5 @@
-import { Badge } from '@/components/badge'
-import { Divider } from '@/components/divider'
+import { Badge } from '@/components/ui/badge'
+import { Divider } from '@/components/ui/divider'
 
 export function Stat({ title, value, change }: { title: string; value: string; change: string }) {
   return (

@@ -36,11 +36,11 @@ import {
 } from '@heroicons/react/16/solid'
 import {
   Cog6ToothIcon,
+  CreditCardIcon,
   HomeIcon,
   QuestionMarkCircleIcon,
   SparklesIcon,
   Square2StackIcon,
-  TicketIcon,
 } from '@heroicons/react/20/solid'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -160,14 +160,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Square2StackIcon />
                 <SidebarLabel>Accounts</SidebarLabel>
               </SidebarItem>
-              <SidebarItem href="/dashboard/events" current={pathname.startsWith('/events')}>
+              <SidebarItem href="/dashboard/subscription" current={pathname.startsWith('/subscription')}>
+                <CreditCardIcon /> {/* You can import this from heroicons */}
+                <SidebarLabel>Subscription</SidebarLabel>
+              </SidebarItem>
+              {/* <SidebarItem href="/dashboard/events" current={pathname.startsWith('/events')}>
                 <Square2StackIcon />
                 <SidebarLabel>Events</SidebarLabel>
               </SidebarItem>
               <SidebarItem href="/dashboard/orders" current={pathname.startsWith('/orders')}>
                 <TicketIcon />
                 <SidebarLabel>Orders</SidebarLabel>
-              </SidebarItem>
+              </SidebarItem> */}
               <SidebarItem href="/dashboard/settings" current={pathname.startsWith('/settings')}>
                 <Cog6ToothIcon />
                 <SidebarLabel>Settings</SidebarLabel>
@@ -201,10 +205,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Dropdown>
               <DropdownButton as={SidebarItem}>
                 <span className="flex min-w-0 items-center gap-3">
-                  <Avatar src={user?.photo_url} className="size-10" square alt={user?.first_name} />
+                  <Avatar src={user?.photoUrl} className="size-10" square alt={user?.firstName} />
                   <span className="min-w-0">
                     <span className="block truncate text-sm/5 font-medium text-zinc-950 dark:text-white">
-                      {user ? user.first_name : 'Unknown'}
+                      {user ? user.firstName : 'Unknown'}
                     </span>
                     <span className="block truncate text-xs/5 font-normal text-zinc-500 dark:text-zinc-400">
                       {user?.username}

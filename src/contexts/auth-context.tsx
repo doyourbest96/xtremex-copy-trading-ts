@@ -10,6 +10,8 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 interface AuthUser extends TelegramUser {
   id: number
   username: string
+  firstName?: string
+  photoUrl?: string
 }
 
 interface AuthContextType {
